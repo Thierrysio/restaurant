@@ -14,8 +14,18 @@ namespace restaurant.Modeles
     public class Restaurant
     {
         public string Nom { get; set; } = "";
+
+        public ObservableCollection<Table> Tables { get; set; } = new();    // 🔹 Ajout
+
         public ObservableCollection<Plat> Menu { get; set; } = new();
         public ObservableCollection<Commande> Commandes { get; set; } = new();
+    }
+
+    public class Table
+    {
+        public int Numero { get; set; }
+        public int Capacite { get; set; }
+        public string Zone { get; set; } = ""; // ex : Salle, Terrasse
     }
 
     public class Plat
@@ -40,6 +50,7 @@ namespace restaurant.Modeles
         public DateTime DateCommande { get; set; };
         public ObservableCollection<LigneCommande> Lignes { get; set; } = new();
         public Serveur Serveur { get; set; } = default!; // 🔹 Lien vers le serveur
+        public Table Table { get; set; } = default!;   // 🔹 Ajout
 
     }
 
