@@ -19,6 +19,8 @@ namespace restaurant.Modeles
 
         public ObservableCollection<Plat> Menu { get; set; } = new();
         public ObservableCollection<Commande> Commandes { get; set; } = new();
+        public ObservableCollection<Serveur> Serveurs { get; set; } = new();
+
     }
 
     public class Table
@@ -76,7 +78,7 @@ namespace restaurant.Modeles
     {
         public int ServeurId { get; set; }
         public string ServeurNom { get; set; } = "";
-        public decimal Montant { get; set; }
+        public double Montant { get; set; }
     }
 
     public class PlatQuantiteDto

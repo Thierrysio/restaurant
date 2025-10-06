@@ -58,5 +58,35 @@ namespace restaurant.Services
             }
                 return res;
         }
-    }
+
+        public ObservableCollection<ServeurCaDto> CalculerCaParServeur(Restaurant resto, DateTime debut, DateTime fin)
+        {
+            var res = new ObservableCollection<ServeurCaDto>();
+
+            foreach(var serveur in resto.Serveurs)
+            {
+                double total = 0;
+                foreach (var cmd in resto.Commandes)
+                {
+                    if (cmd.DateCommande < debut || cmd.DateCommande > fin) continue;
+                    if(serveur.Id == cmd.Serveur.Id)
+                    {
+                        double MontantCommande = 0;
+                        foreach(var lc in cmd.Lignes)
+                        {
+                            MontantCommande += lc.Quantite * lc.Plat.Prix;
+                        }
+                        total += MontantCommande;
+                    }
+                }
+                res.Add(new ServeurCaDto
+                {
+                    ServeurId = serveur.Id,
+                    ServeurNom = serveur.Nom ?? "",
+                    Montant = total
+                });
+            }
+
+            return res;
+        }
 }
