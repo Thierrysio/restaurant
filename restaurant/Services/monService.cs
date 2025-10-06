@@ -32,10 +32,31 @@ namespace restaurant.Services
                 });
 
             }
-            
+
             return res;
 
 
+        }
+        public ObservableCollection<TableCommandesCountDto> CompterCommandesParTable(Restaurant resto, DateTime debut, DateTime fin)
+        {
+            var res = new ObservableCollection<TableCommandesCountDto>();
+
+            foreach (var table in resto.Tables)
+            {
+                int nb = 0;
+                foreach (var cmd in resto.Commandes)
+                {
+                    if (cmd.DateCommande < debut || cmd.DateCommande > fin) continue;
+                    if (cmd.Table.Numero == table.Numero) nb++;
+
+                }
+                res.Add(new TableCommandesCountDto
+                {
+                    TableNumero = table.Numero,
+                    NbCommandes = nb
+                });
+            }
+                return res;
         }
     }
 }
