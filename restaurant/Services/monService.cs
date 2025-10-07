@@ -115,5 +115,31 @@ namespace restaurant.Services
             }
                 return res;
         }
+
+        public ObservableCollection<TableDelaiMoyenDto> CalculerDelaiMoyenServiceParTable(Restaurant resto, int tableNumero)
+        {
+            var res = new ObservableCollection<TableDelaiMoyenDto>();
+
+            TimeSpan total = TimeSpan.Zero;
+            int count = 0;
+
+            foreach (var cmd in resto.Commandes)
+            {
+                if (cmd.Table.Numero != tableNumero) continue;
+                if (cmd.Statut != "servi") continue;
+
+                total = total.Add(cmd.DateServi - cmd.DateCommande);
+                count++;
+            }
+
+            var dto = new TableDelaiMoyenDto
+            {
+                TableNumero = tableNumero,
+                DelaiMoyen = TimeSpan.FromTicks(total.Ticks / count),
+                NbCommandes = count
+            };
+
+            return res;
+        }
     }
 }
