@@ -201,5 +201,61 @@ namespace restaurant.Services
             }
                 return result;
         }
-    }
+
+        public ObservableCollection<PlatQuantiteDto> Top3PlatsParQuantite(Restaurant resto, DateTime debut, DateTime fin)
+        {
+            var result = new ObservableCollection<PlatQuantiteDto>();
+
+            var dico = new Dictionary<Plat, int>();
+
+            foreach (var plat in resto.Menu)
+            {
+                if (!dico.ContainsKey(plat)) dico.Add(plat, 0);
+            }
+
+            foreach (var cmd in resto.Commandes)
+            {
+                foreach (var lc in cmd.Lignes)
+                {
+                    if (!lc.EstServi) continue;
+                    dico[lc.Plat] += lc.Quantite;
+
+                }
+            }
+
+            int prises = 0;
+            while (prises < 3)
+            {
+                Plat bestPlat = null;
+                int bestQte = -1;
+
+                foreach (var kvp in dico)
+                {
+
+                    var plat = kvp.Key;
+                    var qte = kvp.Value;
+
+                    if (qte > bestQte)
+                    {
+                        bestQte = qte;
+                        bestPlat = plat;
+                    }
+
+                }
+                result.Add(new PlatQuantiteDto
+                {
+                    PlatId = 0, // remplace par bestPlat.Id si tu ajoutes un Id au modèle
+                    PlatNom = bestPlat.Nom ?? "",
+                    Quantite = bestQte
+                });
+                dico.Remove(bestPlat);
+                prises++;
+
+
+            }
+
+                return result;
+        }
+
+        }
 }
