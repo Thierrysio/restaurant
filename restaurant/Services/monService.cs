@@ -102,18 +102,18 @@ namespace restaurant.Services
                     {
                         foreach (var ligne in cmd.Lignes)
                         {
-                           qte += ligne.Quantite;
+                            qte += ligne.Quantite;
                         }
                     }
                 }
                 res.Add(new PlatQuantiteDto
                 {
-                   
+
                     PlatNom = plat.Nom ?? "",
                     Quantite = qte
                 });
             }
-                return res;
+            return res;
         }
 
         public ObservableCollection<TableDelaiMoyenDto> CalculerDelaiMoyenServiceParTable(Restaurant resto, int tableNumero)
@@ -140,6 +140,66 @@ namespace restaurant.Services
             };
 
             return res;
+        }
+
+        public ObservableCollection<AlerteAllergeneDto> ListerCommandesAvecAllergene(Restaurant resto, string allergene)
+        {
+            var result = new ObservableCollection<AlerteAllergeneDto>();
+
+            foreach (var cmd in resto.Commandes)
+            {
+                bool contient = false;
+                foreach (var lc in cmd.Lignes)
+                {
+                    foreach (var alg in lc.Plat.Allergenes)
+                    {
+                        if (alg.Nom == allergene)
+                        {
+                            contient = true;
+                            break;
+                        }
+                    }
+
+                    if (contient) break;
+                }
+                var dto = new AlerteAllergeneDto
+                {
+                    CommandeId = cmd.Numero
+                };
+            }
+
+            return result;
+        }
+
+        public ObservableCollection<TableTauxNonServiDto> TauxNonServiParTable(Restaurant resto, DateTime debut, DateTime fin)
+        {
+            var result = new ObservableCollection<TableTauxNonServiDto>();
+
+            foreach (var table in resto.Tables)
+            {
+                int totalPlats = 0;
+                int totalNonServi = 0;
+                foreach (var cmd in resto.Commandes)
+                {
+                    
+                    if (cmd.Table.Numero != table.Numero) continue;
+                    
+                    foreach(var lc in cmd.Lignes)
+                    {
+                        totalPlats++;
+                        if (!lc.EstServi) totalNonServi++;
+                    }
+                }
+
+                var dto = new TableTauxNonServiDto
+                {
+                    TableNumero = table.Numero,
+                    TotalLignes = totalPlats,
+                    LignesNonServies = totalNonServi,
+                    Taux = (double)totalNonServi / (double)totalPlats
+                };
+            }
+                return result;
         }
     }
 }

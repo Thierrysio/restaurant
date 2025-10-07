@@ -35,6 +35,13 @@ namespace restaurant.Modeles
         public string Nom { get; set; } = "";
         public string Categorie { get; set; } = ""; // Entrée, Plat, Dessert
         public double Prix { get; set; }
+        public ObservableCollection<Allergene> Allergenes { get; set; } = new();
+
+    }
+
+    public class Allergene
+    {
+        public string Nom { get; set; } = "";
     }
 
     public class Serveur
@@ -63,7 +70,9 @@ namespace restaurant.Modeles
     {
         public Plat Plat { get; set; } = default!;
         public int Quantite { get; set; }
+        public bool EstServi { get; set; } = false;
     }
+
 
     public class PlatCommandeCountDto
     {
