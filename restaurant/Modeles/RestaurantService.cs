@@ -48,8 +48,11 @@ namespace restaurant.Modeles
     {
         public int Numero { get; set; }
         public string Client { get; set; } = "";
+        public string  Statut { get; set; } = "";
 
-        public DateTime DateCommande { get; set; };
+        public DateTime DateCommande { get; set; } = default;
+
+        public DateTime DateServi { get; set; } = default;
         public ObservableCollection<LigneCommande> Lignes { get; set; } = new();
         public Serveur Serveur { get; set; } = default!; // 🔹 Lien vers le serveur
         public Table Table { get; set; } = default!;   // 🔹 Ajout

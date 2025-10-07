@@ -56,23 +56,23 @@ namespace restaurant.Services
                     NbCommandes = nb
                 });
             }
-                return res;
+            return res;
         }
 
         public ObservableCollection<ServeurCaDto> CalculerCaParServeur(Restaurant resto, DateTime debut, DateTime fin)
         {
             var res = new ObservableCollection<ServeurCaDto>();
 
-            foreach(var serveur in resto.Serveurs)
+            foreach (var serveur in resto.Serveurs)
             {
                 double total = 0;
                 foreach (var cmd in resto.Commandes)
                 {
                     if (cmd.DateCommande < debut || cmd.DateCommande > fin) continue;
-                    if(serveur.Id == cmd.Serveur.Id)
+                    if (serveur.Id == cmd.Serveur.Id)
                     {
                         double MontantCommande = 0;
-                        foreach(var lc in cmd.Lignes)
+                        foreach (var lc in cmd.Lignes)
                         {
                             MontantCommande += lc.Quantite * lc.Plat.Prix;
                         }
@@ -89,4 +89,31 @@ namespace restaurant.Services
 
             return res;
         }
+
+        public ObservableCollection<PlatQuantiteDto> QuantitesVenduesParPlat(Restaurant resto, DateTime jour)
+        {
+            var res = new ObservableCollection<PlatQuantiteDto>();
+            foreach (var plat in resto.Menu)
+            {
+                int qte = 0;
+                foreach (var cmd in resto.Commandes)
+                {
+                    if (cmd.DateCommande == jour)
+                    {
+                        foreach (var ligne in cmd.Lignes)
+                        {
+                           qte += ligne.Quantite;
+                        }
+                    }
+                }
+                res.Add(new PlatQuantiteDto
+                {
+                   
+                    PlatNom = plat.Nom ?? "",
+                    Quantite = qte
+                });
+            }
+                return res;
+        }
+    }
 }
